@@ -58,11 +58,12 @@ public class UtenteController {
         return preServ.savePrenotazione(body, utId);
     }
 
+    //eliminazione prenotazioni
     @DeleteMapping("/{utId}/elimina")
     public void deletePrenotazione(@PathVariable long utId, @RequestBody DeletePrenDTO body) {
         Utente ut = utServ.findById(utId);
-        if (ut.getRuolo() == TipoUtente.UTENTE_NORMALE) {
-            throw new BadRequestExeption("solo gli organizzatori possono eliminare le prenotazioni");
+        if (!(ut.getRuolo() == TipoUtente.UTENTE_NORMALE)) {
+            throw new BadRequestExeption("solo gli utenti normali possono eliminare le prenotazioni");
         }
         preServ.deletePrenotazione(body.id());
     }

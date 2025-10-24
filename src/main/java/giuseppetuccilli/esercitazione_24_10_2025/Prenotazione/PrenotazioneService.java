@@ -48,6 +48,7 @@ public class PrenotazioneService {
         }
     }
 
+    //
     public void deletePrenotazione(long id) {
         Prenotazione found = this.findById(id);
         preRepo.delete(found);
