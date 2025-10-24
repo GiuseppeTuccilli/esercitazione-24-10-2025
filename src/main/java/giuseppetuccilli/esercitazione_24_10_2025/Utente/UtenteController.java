@@ -3,6 +3,9 @@ package giuseppetuccilli.esercitazione_24_10_2025.Utente;
 import giuseppetuccilli.esercitazione_24_10_2025.Evento.Evento;
 import giuseppetuccilli.esercitazione_24_10_2025.Evento.EventoDTO;
 import giuseppetuccilli.esercitazione_24_10_2025.Evento.EventoService;
+import giuseppetuccilli.esercitazione_24_10_2025.Prenotazione.Prenotazione;
+import giuseppetuccilli.esercitazione_24_10_2025.Prenotazione.PrenotazioneDTO;
+import giuseppetuccilli.esercitazione_24_10_2025.Prenotazione.PrenotazioneService;
 import giuseppetuccilli.esercitazione_24_10_2025.exeptions.ValidazioneFallitaExeption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -17,6 +20,8 @@ import java.util.List;
 public class UtenteController {
     @Autowired
     private EventoService evServ;
+    @Autowired
+    private PrenotazioneService preServ;
 
     //endpoint nuovo viaggio
     @PostMapping("/{utId}/organizza")
@@ -31,6 +36,7 @@ public class UtenteController {
         return evServ.saveEvento(body, utId);
     }
 
+    //modifica evento
     @PutMapping("/{utId}/modifica/{evId}")
     public Evento modEvento(@PathVariable long utId, @RequestBody @Validated EventoDTO body, BindingResult valRes, @PathVariable long evId) {
         if (valRes.hasErrors()) {
@@ -41,5 +47,10 @@ public class UtenteController {
             throw new ValidazioneFallitaExeption(errList);
         }
         return evServ.editEvento(body, utId, evId);
+    }
+
+    @PostMapping("/{utId}/prenota")
+    public Prenotazione nuovaPrenotazione(@PathVariable long utId, @RequestBody PrenotazioneDTO body) {
+        return preServ.savePrenotazione(body, utId);
     }
 }
