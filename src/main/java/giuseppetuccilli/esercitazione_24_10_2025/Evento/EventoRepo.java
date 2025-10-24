@@ -4,13 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface EventoRepo extends JpaRepository<Evento, Long> {
-    Optional<Evento> findByData(LocalDate data);
+    List<Evento> findByData(LocalDate data);
 
-    Optional<Evento> findByLuogo(String luogo);
+    List<Evento> findByLuogo(String luogo);
 
 
 }

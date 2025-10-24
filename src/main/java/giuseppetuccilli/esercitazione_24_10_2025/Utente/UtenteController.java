@@ -30,4 +30,16 @@ public class UtenteController {
         }
         return evServ.saveEvento(body, utId);
     }
+
+    @PutMapping("/{utId}/modifica/{evId}")
+    public Evento modEvento(@PathVariable long utId, @RequestBody @Validated EventoDTO body, BindingResult valRes, @PathVariable long evId) {
+        if (valRes.hasErrors()) {
+            List<String> errList = new ArrayList<>();
+            for (int i = 0; i < valRes.getFieldErrors().size(); i++) {
+                errList.add(valRes.getFieldErrors().get(i).getDefaultMessage());
+            }
+            throw new ValidazioneFallitaExeption(errList);
+        }
+        return evServ.editEvento(body, utId, evId);
+    }
 }
