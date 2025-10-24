@@ -3,9 +3,11 @@ package giuseppetuccilli.esercitazione_24_10_2025.Utente;
 import giuseppetuccilli.esercitazione_24_10_2025.Evento.Evento;
 import giuseppetuccilli.esercitazione_24_10_2025.Evento.EventoDTO;
 import giuseppetuccilli.esercitazione_24_10_2025.Evento.EventoService;
+import giuseppetuccilli.esercitazione_24_10_2025.Prenotazione.DeletePrenDTO;
 import giuseppetuccilli.esercitazione_24_10_2025.Prenotazione.Prenotazione;
 import giuseppetuccilli.esercitazione_24_10_2025.Prenotazione.PrenotazioneDTO;
 import giuseppetuccilli.esercitazione_24_10_2025.Prenotazione.PrenotazioneService;
+import giuseppetuccilli.esercitazione_24_10_2025.exeptions.BadRequestExeption;
 import giuseppetuccilli.esercitazione_24_10_2025.exeptions.ValidazioneFallitaExeption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,8 @@ public class UtenteController {
     private EventoService evServ;
     @Autowired
     private PrenotazioneService preServ;
+    @Autowired
+    private UtenteService utServ;
 
     //endpoint nuovo viaggio
     @PostMapping("/{utId}/organizza")
@@ -52,5 +56,14 @@ public class UtenteController {
     @PostMapping("/{utId}/prenota")
     public Prenotazione nuovaPrenotazione(@PathVariable long utId, @RequestBody PrenotazioneDTO body) {
         return preServ.savePrenotazione(body, utId);
+    }
+
+    @DeleteMapping("/{utId}/elimina")
+    public void deletePrenotazione(@PathVariable long utId, @RequestBody DeletePrenDTO body) {
+        Utente ut = utServ.findById(utId);
+        if (ut.getRuolo() == TipoUtente.UTENTE_NORMALE) {
+            throw new BadRequestExeption("solo gli organizzatori possono eliminare le prenotazioni");
+        }
+        preServ.deletePrenotazione(body.id());
     }
 }

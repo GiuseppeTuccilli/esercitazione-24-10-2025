@@ -5,10 +5,12 @@ import giuseppetuccilli.esercitazione_24_10_2025.Evento.EventoService;
 import giuseppetuccilli.esercitazione_24_10_2025.Utente.Utente;
 import giuseppetuccilli.esercitazione_24_10_2025.Utente.UtenteService;
 import giuseppetuccilli.esercitazione_24_10_2025.exeptions.BadRequestExeption;
+import giuseppetuccilli.esercitazione_24_10_2025.exeptions.NotFoundExeption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PrenotazioneService {
@@ -35,5 +37,19 @@ public class PrenotazioneService {
         preRepo.save(p);
         System.out.println("prenotazione salvata");
         return p;
+    }
+
+    public Prenotazione findById(long id) {
+        Optional<Prenotazione> found = preRepo.findById(id);
+        if (found.isPresent()) {
+            return found.get();
+        } else {
+            throw new NotFoundExeption("prenotazione non trovata");
+        }
+    }
+
+    public void deletePrenotazione(long id) {
+        Prenotazione found = this.findById(id);
+        preRepo.delete(found);
     }
 }
