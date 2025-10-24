@@ -25,7 +25,7 @@ public class Utente implements UserDetails {
     private String nome;
     private String email;
     private String password;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TipoUtente ruolo;
 
     public Utente(String nome, String email, String password, TipoUtente ruolo) {

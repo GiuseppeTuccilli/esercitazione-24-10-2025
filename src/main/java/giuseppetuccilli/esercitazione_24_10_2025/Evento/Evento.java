@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "eventi")
@@ -34,5 +35,17 @@ public class Evento {
         this.descrizione = desc;
         this.luogo = luogo;
         this.numeroPosti = posti;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Evento evento = (Evento) o;
+        return id == evento.id && numeroPosti == evento.numeroPosti && Objects.equals(descrizione, evento.descrizione) && Objects.equals(data, evento.data) && Objects.equals(luogo, evento.luogo) && Objects.equals(organizzatore, evento.organizzatore);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, descrizione, data, luogo, numeroPosti, organizzatore);
     }
 }
