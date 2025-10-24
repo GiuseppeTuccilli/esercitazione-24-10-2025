@@ -2,15 +2,20 @@ package giuseppetuccilli.esercitazione_24_10_2025.Utente;
 
 import giuseppetuccilli.esercitazione_24_10_2025.exeptions.BadRequestExeption;
 import giuseppetuccilli.esercitazione_24_10_2025.exeptions.NotFoundExeption;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UtenteService {
     @Autowired
     private UtenteRepo utRepo;
+    @Autowired
+    private PasswordEncoder bcrypt;
 
     public Utente findById(long id) {
         Optional<Utente> found = utRepo.findById(id);
@@ -42,9 +47,9 @@ public class UtenteService {
         } else {
             throw new BadRequestExeption("inserire u per utente, oppure o per organizzatore");
         }
-        Utente newDip = new Utente(payload.nome(), payload.email(), payload.password(), role);
+        Utente newDip = new Utente(payload.nome(), payload.email(), bcrypt.encode(payload.password()), role);
         utRepo.save(newDip);
-        System.out.println("dipendente salvato");
+        System.out.println("utente salvato");
         return newDip;
     }
 
